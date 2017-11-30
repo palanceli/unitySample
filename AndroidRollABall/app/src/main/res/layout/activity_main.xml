@@ -6,6 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.sample.palance.rollaball.MainActivity">
+    <!--<com.unity3d.player.UnityPlayer-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/unityPlayer"></com.unity3d.player.UnityPlayer>-->
 
     <!--<Button-->
         <!--android:id="@+id/scanbutton"-->

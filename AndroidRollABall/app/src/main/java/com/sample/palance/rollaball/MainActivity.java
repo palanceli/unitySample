@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.unity3d.player.UnityPlayer;
 
 public class MainActivity extends AppCompatActivity {
     protected UnityPlayer mUnityPlayer;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        mUnityPlayer = findViewById(R.id.unityPlayer);
 
         mUnityPlayer = new UnityPlayer(this);
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
