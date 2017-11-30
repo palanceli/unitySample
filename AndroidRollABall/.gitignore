@@ -8,3 +8,7 @@
 /captures
 .externalNativeBuild
 
+app/libs/unity-classes.jar
+app/src/main/assets/bin/*
+app/src/main/jniLibs/*
+app/src/main/java/com/sample/palance/rollaball/UnityPlayerActivity.java
