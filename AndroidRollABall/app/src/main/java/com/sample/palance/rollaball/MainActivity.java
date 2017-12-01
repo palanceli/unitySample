@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         mUnityPlayer = new UnityPlayer(this);
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout);
         layout.addView(mUnityPlayer);
+        mUnityPlayer.UnitySendMessage("Player", "ARoll", "-3#-3");
+
 
 //        Button scanButton = (Button)findViewById(R.id.scanbutton);
 //        scanButton.setOnClickListener(new View.OnClickListener(){
@@ -31,5 +33,15 @@ public class MainActivity extends AppCompatActivity {
 //                        .show();
 //            }
 //        });
+    }
+
+    @Override protected void onResume(){
+        super.onResume();
+        mUnityPlayer.resume();
+    }
+
+    @Override public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        mUnityPlayer.windowFocusChanged(hasFocus);
     }
 }
