@@ -7,3 +7,7 @@
 /build
 /captures
 .externalNativeBuild
+
+app/src/main/jniLibs/*
+app/libs/unity-classes.jar
+app/src/main/assets/bin/*
