@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 	public float speed;
+	private int count;
+	public Text countText;
 
 	// Use this for initialization
 	void Start () {
-		
+		count = 0;
+		setCountText ();
 	}
 	
 	// Update is called once per frame
@@ -18,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate(){
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
-		Debug.Log ("(" + moveHorizontal + ", " + moveVertical + ")\n");
+//		Debug.Log ("(" + moveHorizontal + ", " + moveVertical + ")\n");
 		Roll (moveHorizontal, moveVertical);
 	}
 
@@ -34,5 +38,17 @@ public class PlayerController : MonoBehaviour {
 		float moveHorizontal = float.Parse (paramArray [0]);
 		float moveVertical = float.Parse(paramArray[1]);
 		Roll(moveHorizontal, moveVertical);
+	}
+
+	void OnTriggerEnter(Collider other){
+		if (other.gameObject.tag == "PickUp") {
+			other.gameObject.SetActive (false);
+			count++;
+			setCountText ();
+		}
+	}
+
+	void setCountText(){
+		countText.text = "Count: " + count;
 	}
 }
