@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.unity3d.player.UnityPlayer;
@@ -43,7 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mUpdateMojiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context, "Mouth opened", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Mouth opened", Toast.LENGTH_SHORT).show();
+            String openValue = String.format("%f", emotion[3]);
+//            Log.d(TAG,"openValue="+openValue);
+            mUnityPlayer.UnitySendMessage("_laugh", "AFireLaugh", openValue);
         }
     };
 
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             ActivityCompat.requestPermissions(this,
                     PERMISSIONS_REQ,
                     REQUEST_CODE_PERMISSION);
@@ -64,21 +68,19 @@ public class MainActivity extends AppCompatActivity {
         mCameraPreview = (CameraPreview)findViewById(R.id.cam_preview);
         mCameraPreview.init(this);
 
-//        mUnityPlayer = new UnityPlayer(this);
-//        ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.mainLayout);
-//        layout.addView(mUnityPlayer);
+        mUnityPlayer = new UnityPlayer(this);
+        ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.mainLayout);
+        layout.addView(mUnityPlayer);
 
         TimerTask task = new TimerTask(){
             @Override
             public void run(){
-                if(emotion[3] > 0.5){
-                    Intent intent = newMojiIntent();
-                    sendBroadcast(intent);
-                }
+                Intent intent = newMojiIntent();
+                sendBroadcast(intent);
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task, 0, 1000);
+        timer.schedule(task, 0, 100);
     }
 
     @Override
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy(){
+        super.onDestroy();
         unregisterReceiver(mUpdateMojiReceiver);
     }
 

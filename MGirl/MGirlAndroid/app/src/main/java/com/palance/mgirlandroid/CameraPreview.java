@@ -72,7 +72,8 @@ public class CameraPreview extends SurfaceView
                 mCamera = Camera.open(1);
             }
         }catch (Exception e){
-            Log.d(TAG, "Failed to open Camera");
+            Log.d(TAG, "Failed to open Camera1");
+            e.printStackTrace();
         }
         try{
             if(mCamera == null){
@@ -83,6 +84,7 @@ public class CameraPreview extends SurfaceView
         }
         try{
             mCamera.setPreviewTexture(mSurfaceTexture);
+//            mCamera.setDisplayOrientation(90);
         }catch (Exception e){
             Log.d(TAG, "Failed to open Camera");
         }
