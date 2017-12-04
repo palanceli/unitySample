@@ -9,5 +9,9 @@
 .externalNativeBuild
 
 app/src/main/jniLibs/*
+!app/src/main/jniLibs/*/libandroid_dlib.so
+
+
+
 app/libs/unity-classes.jar
 app/src/main/assets/bin/*

@@ -4,49 +4,65 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MGirlLaugh : MonoBehaviour {
-	public Animation mAnimation;
 	public Slider mLaughSlider;
-	public Text mTextInfo;
+	public Text mLaughText;
+
+	public Slider mHeadTwistSlider;
+	public Text mHeadTwistText;
+
+	public Slider mHeadLRSlider;
+	public Text mHeadLRText;
+
+	private float[] mEmotions;
 
 	// Use this for initialization
-	void Start () {
-		mAnimation = GetComponent<Animation> ();
-		mAnimation.wrapMode = WrapMode.Loop;
-		StartCoroutine ("FireLaugh");
-		mAnimation ["Take 001"].speed = 0;
+	void Start () { 
+		mEmotions = new float[32];
+	}
+
+	void updateEmotionsFromSlider(){
+		mEmotions [0] = mLaughSlider.normalizedValue;
+		mLaughText.text = "laugh=" + mEmotions [0];
+		mEmotions [1] = mHeadTwistSlider.normalizedValue;
+		mHeadTwistText.text = "headtwist=" + mEmotions [1];
+		mEmotions [2] = mHeadLRSlider.normalizedValue;
+		mHeadLRText.text = "headLR=" + mEmotions [2];
 	}
 
 	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyDown (KeyCode.G)) {
-			Debug.Log ("key down G");
-			StartCoroutine ("AFireLaugh", "0.30");
-		}
-	}
-
-	IEnumerator FireLaugh(){
-		Debug.Log ("FireLaugh...");
-
-		mAnimation.Play (mAnimation.clip.name);
-		Debug.Log (mAnimation.clip.name);
-		Debug.Log (mAnimation.clip.length);
-		yield return new WaitForSeconds (mAnimation.clip.length);
-	}
-
-	void AFireLaugh(string paramString){
-		string[] paramArray = paramString.Split ('#');
-		Debug.Log (paramString);
-		if (paramArray.Length != 1)
-			return;
-		float openValue = float.Parse (paramArray [0]);
-		mAnimation ["Take 001"].normalizedTime =  openValue;
-		mTextInfo.text = "Value="+paramString;
+	void Update () { 
+		updateEmotionsFromSlider ();
+		Update3DEmotion ();
 	}
 
 	public void SliderChange(){
-		Debug.Log ("slider value=" + mLaughSlider.value);
-//		mAnimation ["Take 001"].normalizedTime =  mLaughSlider.normalizedValue;
-//		mAnimation ["Take 001"].speed = 0;
-		mAnimation["Take 001"].normalizedTime = 0.240000f;
+//		updateEmotionsFromSlider ();
+//		Update3DEmotion ();
+	}
+
+	void Update3DEmotion(){
+		Animation anim = GetComponent<Animation> ();
+
+		anim["LaughAnim"].speed = 0;
+		anim["LaughAnim"].normalizedTime = mEmotions[0];
+
+		anim ["HeadTwistAnim"].speed = 0;
+		anim ["HeadTwistAnim"].normalizedTime = mEmotions[1];
+		anim ["HeadTwistAnim"].blendMode = AnimationBlendMode.Additive;
+		anim ["HeadTwistAnim"].wrapMode = WrapMode.ClampForever;
+		anim ["HeadTwistAnim"].layer = 10;
+		anim ["HeadTwistAnim"].weight = 1.0f;
+
+
+		anim ["HeadLRAnim"].speed = 0;
+		anim ["HeadLRAnim"].normalizedTime = mEmotions [2];
+		anim ["HeadLRAnim"].blendMode = AnimationBlendMode.Additive;
+		anim ["HeadLRAnim"].wrapMode = WrapMode.ClampForever;
+		anim ["HeadLRAnim"].layer = 10;
+		anim ["HeadLRAnim"].weight = 1.0f;
+
+		anim.CrossFade ("LaughAnim");
+		anim.CrossFade ("HeadTwistAnim");
+		anim.CrossFade ("HeadLRAnim");
 	}
 }
