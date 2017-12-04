@@ -44,10 +44,20 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mUpdateMojiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            Toast.makeText(context, "Mouth opened", Toast.LENGTH_SHORT).show();
             String openValue = String.format("%f", emotion[3]);
-//            Log.d(TAG,"openValue="+openValue);
-            mUnityPlayer.UnitySendMessage("_laugh", "AFireLaugh", openValue);
+            String param = new String();
+            param += "HeadTwist=0";
+            param += "#" + "HeadLR=" + (emotion[1] + 30.0f) / 60.0f;
+            param += "#" + "HeadUD=" + (emotion[2] + 30.0f) / 60.0f;
+            if(emotion[3] > 1.0f)
+                emotion[3] = 1.0f;
+            else if(emotion[3] < 0.0f)
+                emotion[3] = 0.0f;
+            param += "#" + "MouthOpen=" + emotion[3];
+            Log.d(TAG, param );
+            if(mUnityPlayer != null) {
+                mUnityPlayer.UnitySendMessage("Idle", "ControlByAndroid", param);
+            }
         }
     };
 
@@ -80,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task, 0, 100);
+        timer.schedule(task, 0, 1000);
     }
 
     @Override

@@ -7,9 +7,11 @@ public class Idle : MonoBehaviour {
 	public Slider mHeadTwistSlider;
 	public Slider mHeadLRSlider;
 	public Slider mHeadUDSlider;
+	private Dictionary<string, float> mEmotionDict;
 
 	// Use this for initialization
 	void Start () {
+		mEmotionDict = new Dictionary<string, float> ();
 		Animation anim = GetComponent<Animation> ();
 		anim ["IdleAnim"].wrapMode = WrapMode.Loop;
 		anim ["HeadLRAnim"].blendMode = AnimationBlendMode.Additive;
@@ -34,15 +36,29 @@ public class Idle : MonoBehaviour {
 		anim ["HeadUDAnim"].weight = 1.0f;
 		anim ["HeadUDAnim"].enabled = true;
 		anim ["HeadUDAnim"].speed = 0;
+
+		SliderChange ();
+	}
+
+	public void SliderChange(){
+		mEmotionDict["HeadTwist"] = mHeadTwistSlider.normalizedValue;
+		mEmotionDict["HeadLR"] = mHeadLRSlider.normalizedValue;
+		mEmotionDict["HeadUD"] = mHeadUDSlider.normalizedValue;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		Animation anim = GetComponent<Animation> ();
+		anim ["HeadTwistAnim"].normalizedTime = mEmotionDict["HeadTwist"];
+		anim ["HeadLRAnim"].normalizedTime = mEmotionDict["HeadLR"];
+		anim ["HeadUDAnim"].normalizedTime = mEmotionDict["HeadUD"];
+	}
 
-		anim ["HeadTwistAnim"].normalizedTime = mHeadTwistSlider.normalizedValue;
-		anim ["HeadLRAnim"].normalizedTime = mHeadLRSlider.normalizedValue;
-		anim ["HeadUDAnim"].normalizedTime = mHeadUDSlider.normalizedValue;
-
+	void ControlByAndroid(string paramString){
+		string[] paramList = paramString.Split ('#');
+		for (int i = 0; i < paramList.Length; i++) {
+			string[] kv = paramList [i].Split ('=');
+			mEmotionDict [kv [0]] = float.Parse(kv [1]);
+		}
 	}
 }
